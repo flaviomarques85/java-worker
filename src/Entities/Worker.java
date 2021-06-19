@@ -1,6 +1,7 @@
 package Entities;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class Worker {
@@ -11,11 +12,11 @@ public class Worker {
     private Department department;
     private List<HourContract> contracts = new ArrayList<>();
 
-    public Worker(String name, String department , WorkerLevel level, Double baseSalary) {
+    public Worker(String name, Department department , WorkerLevel level, Double baseSalary) {
         this.name = name;
         this.level = level;
         this.baseSalary = baseSalary;
-        this.department =  new Department(department);
+        this.department =  department;
     }
 
     public String getName() {
@@ -54,6 +55,22 @@ public class Worker {
         this.contracts.remove(contract);
     }
 
-    
+    public Department getDepartment(){
+        return this.department;
+    }
+
+    public double income (int month, int year){
+       double sum  =  getBaseSalary();
+       Calendar cal =  Calendar.getInstance();
+       for(HourContract c : contracts){
+            cal.setTime(c.getDate());
+            int c_month =  1 +  cal.get(Calendar.MONTH);
+            int c_year =  cal.get(Calendar.YEAR);
+            if(month ==  c_month && year == c_year ){
+                sum += c.totalValue();
+            }
+       }
+        return sum;
+    }
 
 }
